@@ -19,7 +19,7 @@ const Theme = createTheme({
           main: '#e4e4e4',
         },
         error: {
-          main: '#ff4600',
+          main: '#ff7440',
         },
     },
 })
