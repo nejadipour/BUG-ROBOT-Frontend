@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(2),
     },
     logo: {
-        width: "110px",
+        width: "140px",
     },
 }));
 
