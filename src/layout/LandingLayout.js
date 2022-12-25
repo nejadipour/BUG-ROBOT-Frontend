@@ -4,14 +4,18 @@ import logo from "../assets/bug_robot_logo.jpg";
 
 const useStyles = makeStyles((theme) => ({
     wrapper: {
-        width: "60vw",
+        width: "100vw",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        backgroundColor: theme.palette.background.default,
     },
     logoContainer: {
         marginTop: theme.spacing(5),
         marginBottom: theme.spacing(2),
     },
     logo: {
-        width: '100px'
+        width: "110px",
     },
 }));
 
@@ -27,7 +31,11 @@ export default function LandingLayout(props) {
                     className={classes.logoContainer}
                 >
                     <a href="/home">
-                        <img src={logo} alt={"logo of the BUG & ROBOT game"} className={classes.logo} />
+                        <img
+                            src={logo}
+                            alt={"logo of the BUG & ROBOT game"}
+                            className={classes.logo}
+                        />
                     </a>
                 </Grid>
                 <Outlet />
