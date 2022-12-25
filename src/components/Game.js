@@ -5,7 +5,7 @@ import Stack from "@mui/material/Stack";
 
 const useStyles = makeStyles((theme) => ({
     deleteButton: {
-        color: theme.palette.secondary.main,
+        color: theme.palette.error.main,
         borderRadius: "15px",
     },
     menuButton: {
@@ -23,7 +23,7 @@ export default function Game(props) {
             <Grid item md={12} sm={12}>
                 <Board boardId={props.boardId} />
             </Grid>
-            <Stack direction="row" spacing={2}>
+            <Stack marginTop={10} direction="row" spacing={2}>
                 <Button variant="outlined" className={classes.menuButton}>
                     Back to Menu
                 </Button>
