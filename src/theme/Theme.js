@@ -21,6 +21,9 @@ const Theme = createTheme({
         error: {
           main: '#ff698c',
         },
+        fire: {
+          main: '#ff6024',
+        }
     },
 })
 
