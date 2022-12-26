@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
         width: "100vw",
         justifyContent: "center",
         alignItems: "center",
-        height: "100vh",
+        minHeight: "100vh",
         backgroundColor: theme.palette.background.default,
     },
     logoContainer: {
