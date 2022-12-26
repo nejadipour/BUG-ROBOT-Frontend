@@ -23,7 +23,7 @@ export default function Game(props) {
             <Grid item md={12} sm={12}>
                 <Board boardId={props.boardId} />
             </Grid>
-            <Stack marginTop={10} direction="row" spacing={2}>
+            <Stack marginTop={10} marginBottom={15} direction="row" spacing={2}>
                 <Button variant="outlined" className={classes.menuButton}>
                     Back to Menu
                 </Button>
