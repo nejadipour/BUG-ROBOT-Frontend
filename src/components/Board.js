@@ -5,6 +5,7 @@ import SmartToyIcon from "@mui/icons-material/SmartToy";
 import PestControlIcon from "@mui/icons-material/PestControl";
 import WhatshotIcon from "@mui/icons-material/Whatshot";
 import Square from "./Square";
+import Card from "./Card";
 
 const useStyles = makeStyles((theme) => ({
     cardButton: {
@@ -24,11 +25,27 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: theme.palette.fire.main,
         },
     },
+    square: {
+        backgroundColor: theme.palette.primary.main,
+        margin: "15px",
+        border: "2px solid " + theme.palette.secondary.main,
+        borderRadius: "15px",
+        boxShadow:
+            "0 12px " +
+            theme.palette.secondary.main +
+            ", 0 18px rgba(0,0,0,0.4)",
+        width: "90px",
+        height: "80px",
+        "&:hover": {
+            backgroundColor: theme.palette.primary.main,
+        },
+    },
 }));
 
 export default function Board() {
     const classes = useStyles();
-    const [shape, setShape] = useState([4, 5]); // shape format: [row, column]
+    const shape = [4, 4]; // shape format: [row, column]
+    const [selectedCard, setSelectedCard] = useState(null);
 
     const rows = [];
     for (var r = 0; r < shape[0]; r++) {
@@ -48,7 +65,10 @@ export default function Board() {
                     {rows.map((row) => (
                         <Stack direction="row">
                             {columns.map((column) => (
-                                <Square position={[row, column]} />
+                                <Square
+                                    className={classes.square}
+                                    position={[row, column]}
+                                />
                             ))}
                         </Stack>
                     ))}
@@ -58,33 +78,57 @@ export default function Board() {
             <Grid item md={1} sm={12} />
             {/* The Buttons Needed in The Game  */}
             <Grid item md={2} sm={12}>
-                <Stack marginTop={10} direction="column" alignItems="center" spacing={3}>
+                <Stack
+                    marginTop={10}
+                    direction="column"
+                    alignItems="center"
+                    spacing={3}
+                >
                     {/* The Robot Card Button */}
-                    <Button variant="outlined" className={classes.cardButton}>
-                        <Stack
-                            direction="column"
-                            alignItems="center"
-                            spacing={1}
-                        >
-                            <SmartToyIcon />
-                            <Typography>Robot</Typography>
-                        </Stack>
-                    </Button>
+                    <Card
+                        icon={<SmartToyIcon />}
+                        text={"ROBOT"}
+                        id={"robot_card"}
+                        className={classes.cardButton}
+                        state={{
+                            default: {
+                                color: "#ffa42e",
+                                backgroundColor: "#201f1d",
+                            },
+                            selected: {
+                                color: "#201f1d",
+                                backgroundColor: "#ffa42e",
+                            },
+                        }}
+                        selectedCard={selectedCard}
+                        setSelectedCard={setSelectedCard}
+                    />
 
                     {/* The BUG Card Button */}
-                    <Button variant="outlined" className={classes.cardButton}>
-                        <Stack
-                            direction="column"
-                            alignItems="center"
-                            spacing={1}
-                        >
-                            <PestControlIcon />
-                            <Typography>BUG</Typography>
-                        </Stack>
-                    </Button>
+                    <Card
+                        icon={<PestControlIcon />}
+                        text={"BUG"}
+                        id={"bug_card"}
+                        className={classes.cardButton}
+                        state={{
+                            default: {
+                                color: "#ffa42e",
+                                backgroundColor: "#201f1d",
+                            },
+                            selected: {
+                                color: "#201f1d",
+                                backgroundColor: "#ffa42e",
+                            },
+                        }}
+                        selectedCard={selectedCard}
+                        setSelectedCard={setSelectedCard}
+                    />
 
                     {/* The Fire Action Button */}
-                    <Button className={classes.fireButton}>
+                    <Button
+                        disabled={selectedCard !== "robot_card"}
+                        className={classes.fireButton}
+                    >
                         <Stack direction="row" spacing={1}>
                             <WhatshotIcon />
                             <Typography>Attack</Typography>
@@ -92,7 +136,6 @@ export default function Board() {
                     </Button>
                 </Stack>
             </Grid>
-
         </Grid>
     );
 }
