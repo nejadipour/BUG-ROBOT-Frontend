@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Typography, makeStyles } from "@material-ui/core";
+import { Button, Grid, Typography, makeStyles } from "@material-ui/core";
 import { Stack } from "@mui/material";
 import React, { useState } from "react";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Board() {
     const classes = useStyles();
-    const [shape, setShape] = useState([10, 10]); // shape format: [row, column]
+    const [shape, setShape] = useState([4, 5]); // shape format: [row, column]
 
     const rows = [];
     for (var r = 0; r < shape[0]; r++) {
@@ -48,16 +48,17 @@ export default function Board() {
                     {rows.map((row) => (
                         <Stack direction="row">
                             {columns.map((column) => (
-                                <Square position={[row, column]}/>
+                                <Square position={[row, column]} />
                             ))}
                         </Stack>
                     ))}
                 </Stack>
             </Grid>
 
+            <Grid item md={1} sm={12} />
             {/* The Buttons Needed in The Game  */}
             <Grid item md={2} sm={12}>
-                <Stack direction="column" alignItems="center" spacing={3}>
+                <Stack marginTop={10} direction="column" alignItems="center" spacing={3}>
                     {/* The Robot Card Button */}
                     <Button variant="outlined" className={classes.cardButton}>
                         <Stack
@@ -91,7 +92,7 @@ export default function Board() {
                     </Button>
                 </Stack>
             </Grid>
-            <Grid item md={1} sm={12} />
+
         </Grid>
     );
 }
