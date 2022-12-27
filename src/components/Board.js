@@ -8,6 +8,10 @@ import Square from "./Square";
 import Card from "./Card";
 
 const useStyles = makeStyles((theme) => ({
+    name: {
+        color: theme.palette.secondary.main,
+        fontWeight: "bold",
+    },
     cardButton: {
         "& .MuiSvgIcon-root": {
             fontSize: "2.5rem",
@@ -27,8 +31,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Board() {
+export default function Board(props) {
     const classes = useStyles();
+    const { board } = props;
     const shape = [4, 5]; // shape format: [row, column]
     const [selectedCard, setSelectedCard] = useState(null);
     const [changeCard, setChangeCard] = useState(null);
@@ -72,11 +77,14 @@ export default function Board() {
             {/* The Buttons Needed in The Game  */}
             <Grid item md={2} sm={12}>
                 <Stack
-                    marginTop={10}
+                    marginTop={5}
                     direction="column"
                     alignItems="center"
                     spacing={3}
                 >
+                    <Typography className={classes.name}>
+                        {board.name}
+                    </Typography>
                     {/* The Robot Card Button */}
                     <Card
                         icon={<SmartToyIcon />}
@@ -119,7 +127,7 @@ export default function Board() {
 
                     {/* The Fire Action Button */}
                     <Button
-                        disabled={selectedCard !== "robot_card"}
+                        disabled={selectedSquare === null}
                         className={classes.fireButton}
                     >
                         <Stack direction="row" spacing={1}>
