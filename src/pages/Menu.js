@@ -29,7 +29,7 @@ export default function Menu() {
     const [error, setError] = useState("");
     const [render, setRender] = useState(false);
 
-    async function fetchUsers() {
+    async function fetchBoards() {
         try {
             // const response = await axios.get('')
             // setBoards(response.data);
@@ -47,13 +47,13 @@ export default function Menu() {
 
             setRender(true);
         } catch (error) {
-            setError("مشکلی در دریافت اطلاعات کاربران به وجود آمد");
+            setError("there was a problem fetching the boards");
             setRender(true);
         }
     }
 
     useEffect(() => {
-        if (!render) fetchUsers();
+        if (!render) fetchBoards();
     }, [render]);
 
     return (
