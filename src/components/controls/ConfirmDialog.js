@@ -1,80 +1,103 @@
-import React from 'react'
-import { Dialog, DialogContent, DialogActions, Typography, makeStyles, Button, Grid } from '@material-ui/core'
+import React, { useState } from "react";
+import {
+    Dialog,
+    DialogContent,
+    DialogActions,
+    Typography,
+    makeStyles,
+    Button,
+} from "@material-ui/core";
+import { Stack } from "@mui/material";
 
-
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     dialog: {
         padding: theme.spacing(2),
-        position: 'absolute',
+        position: "absolute",
         top: theme.spacing(20),
-        width: '50vw',
-        minHeight: '20vh',
+        width: "50vw",
+        minHeight: "20vh",
         background: theme.palette.background.default,
     },
     dialogContent: {
-        textAlign: 'center',
+        textAlign: "center",
         color: theme.palette.primary.main,
-        fontWeight: "bold"
+        fontWeight: "bold",
     },
     dialogAction: {
-        justifyContent: 'center'
+        justifyContent: "center",
     },
     confirmButton: {
-        minWidth: '80px',
-        width: '6vw',
-        borderRadius: '15px',
+        minWidth: "80px",
+        width: "6vw",
+        borderRadius: "15px",
         backgroundColor: theme.palette.secondary.main,
-        '&:hover': {
+        "&:hover": {
             backgroundColor: theme.palette.secondary.main,
         },
-        fontSize: '1rem',
+        fontSize: "1rem",
         color: theme.palette.background.default,
-        display: 'flex',
-        justifyContent: 'center',
-        flexDirection: 'row',
-        margin: theme.spacing(2)
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "row",
+        margin: theme.spacing(2),
     },
     rejectButton: {
-        minWidth: '80px',
-        width: '6vw',
-        borderRadius: '15px',
+        minWidth: "80px",
+        width: "6vw",
+        borderRadius: "15px",
         backgroundColor: theme.palette.primary.main,
-        '&:hover': {
+        "&:hover": {
             backgroundColor: theme.palette.primary.main,
         },
-        fontSize: '1rem',
+        fontSize: "1rem",
         color: theme.palette.background.default,
-        display: 'flex',
-        justifyContent: 'center',
-        flexDirection: 'row',
-        margin: theme.spacing(2)
-    }
-
-}))
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "row",
+        margin: theme.spacing(2),
+    },
+    error: {
+        color: theme.palette.error.main,
+        fontWeight: "bold",
+    },
+}));
 
 export default function ConfirmDialog(props) {
-
     const { confirmDialog, setConfirmDialog } = props;
     const classes = useStyles();
+    const [error, setError] = useState("");
 
-    const confirmButtonInfo = confirmDialog.confirmButtonInfo ?
-        confirmDialog.confirmButtonInfo : {
-            text: "YES",
-            color: "secondary"
-        }
+    const confirmButtonInfo = confirmDialog.confirmButtonInfo
+        ? confirmDialog.confirmButtonInfo
+        : {
+              text: "YES",
+              color: "secondary",
+          };
 
-    const rejectButtonInfo = confirmDialog.rejectButtonInfo ?
-        confirmDialog.rejectButtonInfo : {
-            text: "CANCELE",
-            color: "default",
-        }
+    const rejectButtonInfo = confirmDialog.rejectButtonInfo
+        ? confirmDialog.rejectButtonInfo
+        : {
+              text: "NO!",
+              color: "default",
+          };
 
     const handleClose = () => {
-        setConfirmDialog({ ...confirmDialog, isOpen: false })
+        setConfirmDialog({ ...confirmDialog, isOpen: false });
+    };
+
+    const handleClick = async () => {
+        var success = await confirmDialog.onConfirm();
+        if (!success) {
+            setError("there was a problem in confirming the action");
+        }
     };
 
     return (
-        <Dialog open={confirmDialog.isOpen} classes={{ paper: classes.dialog }} onClose={handleClose}>
+        <Dialog
+            open={confirmDialog.isOpen}
+            classes={{ paper: classes.dialog }}
+            onClose={handleClose}
+        >
             <DialogContent>
                 <Typography className={classes.dialogContent}>
                     {confirmDialog.title}
@@ -82,17 +105,33 @@ export default function ConfirmDialog(props) {
             </DialogContent>
 
             <DialogActions className={classes.dialogAction}>
-                <Grid justifyContent='center' container md={12} sm={12}>
-                        <Button className={classes.rejectButton} onClick={handleClose}>
+                <Stack
+                    direction="column"
+                    justifyContent="center"
+                    alignItems="center"
+                >
+                    {error !== "" && (
+                        <Typography className={classes.error}>
+                            {error}
+                        </Typography>
+                    )}
+                    <Stack direction="row">
+                        <Button
+                            className={classes.rejectButton}
+                            onClick={handleClose}
+                        >
                             {rejectButtonInfo.text}
                         </Button>
-                    
-                        <Button className={classes.confirmButton} onClick={confirmDialog.onConfirm}>
-                            {confirmButtonInfo.text}
-                        </Button>                    
-                </Grid>
-            </DialogActions>
 
+                        <Button
+                            className={classes.confirmButton}
+                            onClick={handleClick}
+                        >
+                            {confirmButtonInfo.text}
+                        </Button>
+                    </Stack>
+                </Stack>
+            </DialogActions>
         </Dialog>
-    )
+    );
 }
