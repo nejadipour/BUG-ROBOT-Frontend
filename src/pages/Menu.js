@@ -9,6 +9,8 @@ import {
 import React, { useEffect, useState } from "react";
 import MenuItem from "../components/items/MenuItem";
 import { Stack } from "@mui/material";
+import Popup from "../components/controls/Popup";
+import BoardForm from "../forms/BoardForm";
 
 const useStyles = makeStyles((theme) => ({
     error: {
@@ -28,6 +30,7 @@ export default function Menu() {
     const [boards, setBoards] = useState([]);
     const [error, setError] = useState("");
     const [render, setRender] = useState(false);
+    const [openBoardForm, setOpenBoardForm] = useState(false);
 
     async function fetchBoards() {
         try {
@@ -57,37 +60,53 @@ export default function Menu() {
     }, [render]);
 
     return (
-        <Grid container justifyContent="center">
-            {render && (
-                <Stack alignItems="center" direction="column">
-                    <List
-                        sx={{
-                            minWidth: "25vw",
-                            position: "relative",
-                            overflow: "auto",
-                            maxHeight: "60vh",
-                            "& ul": { padding: 0 },
-                        }}
-                        subheader={<li />}
-                    >
-                        {boards.map((board) => (
-                            <MenuItem board={board} />
-                        ))}
-                    </List>
+        <>
+            <Grid container justifyContent="center">
+                {render && (
+                    <Stack alignItems="center" direction="column">
+                        <List
+                            sx={{
+                                minWidth: "25vw",
+                                position: "relative",
+                                overflow: "auto",
+                                maxHeight: "60vh",
+                                "& ul": { padding: 0 },
+                            }}
+                            subheader={<li />}
+                        >
+                            {boards.map((board) => (
+                                <MenuItem board={board} />
+                            ))}
+                        </List>
 
-                    <Box padding={2}>
-                        {error !== "" && (
-                            <Typography className={classes.error}>
-                                {error}
-                            </Typography>
-                        )}
-                    </Box>
+                        <Box padding={2}>
+                            {error !== "" && (
+                                <Typography className={classes.error}>
+                                    {error}
+                                </Typography>
+                            )}
+                        </Box>
 
-                    <Button variant="outlined" className={classes.createButton}>
-                        +Add Board
-                    </Button>
-                </Stack>
-            )}
-        </Grid>
+                        <Button
+                            variant="outlined"
+                            className={classes.createButton}
+                            onClick={() => {
+                                setOpenBoardForm(true);
+                            }}
+                        >
+                            +Add Board
+                        </Button>
+                    </Stack>
+                )}
+            </Grid>
+
+            <Popup
+                title="CREATE BOARD"
+                openPopup={openBoardForm}
+                setOpenPopup={setOpenBoardForm}
+            >
+                <BoardForm />
+            </Popup>
+        </>
     );
 }
