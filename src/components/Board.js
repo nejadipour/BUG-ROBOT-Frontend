@@ -39,13 +39,19 @@ const useStyles = makeStyles((theme) => ({
         "&:hover": {
             backgroundColor: theme.palette.primary.main,
         },
+        "& .MuiSvgIcon-root": {
+            fontSize: "2rem",
+            color: theme.palette.background.main,
+        },
     },
 }));
 
 export default function Board() {
     const classes = useStyles();
-    const shape = [4, 4]; // shape format: [row, column]
+    const shape = [4, 5]; // shape format: [row, column]
     const [selectedCard, setSelectedCard] = useState(null);
+    const [changeCard, setChangeCard] = useState(null);
+    const [selectedSquare, setSelectedSquare] = useState(null);
 
     const rows = [];
     for (var r = 0; r < shape[0]; r++) {
@@ -67,7 +73,14 @@ export default function Board() {
                             {columns.map((column) => (
                                 <Square
                                     className={classes.square}
-                                    position={[row, column]}
+                                    position={JSON.stringify([column, row])}
+                                    is_occupied={true}
+                                    type={null}
+                                    selectedCard={selectedCard}
+                                    changeCard={changeCard}
+                                    setChangeCard={setChangeCard}
+                                    selectedSquare={selectedSquare}
+                                    setSelectedSquare={setSelectedSquare}
                                 />
                             ))}
                         </Stack>
