@@ -5,6 +5,7 @@ import Stack from "@mui/material/Stack";
 import { useLocation, useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import ConfirmDialog from "../components/controls/ConfirmDialog";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     deleteButton: {
@@ -18,9 +19,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Game(props) {
+export default function Game() {
     const classes = useStyles();
     const location = useLocation();
+    const board = location.state?.board;
     const navigate = useNavigate();
 
     const [confirmLogout, setConfirmLogout] = useState({
@@ -33,7 +35,8 @@ export default function Game(props) {
 
     const handleDelete = async () => {
         try {
-            navigate('/home');
+            await axios.delete("/board/" + board.id);
+            navigate("/home");
             return true;
         } catch (error) {
             return false;
@@ -44,7 +47,7 @@ export default function Game(props) {
         <>
             <Grid container justifyContent="center" md={12} sm={12}>
                 <Grid item md={12} sm={12}>
-                    <Board board={location.state?.board} />
+                    <Board board={board} />
                 </Grid>
                 <Stack
                     marginTop={10}
