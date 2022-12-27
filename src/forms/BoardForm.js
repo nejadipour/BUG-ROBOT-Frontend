@@ -14,84 +14,87 @@ import AbcIcon from "@mui/icons-material/Abc";
 import TableRowsIcon from "@mui/icons-material/TableRows";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
 import { BoardFormSchema } from "../validations/BoardFormValidation";
+import axios from "axios";
+import { useNavigate } from "react-router";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
 
 const initialValues = {
     name: "",
+    robot_strength: "",
     row: "",
     column: "",
 };
 
 const useStyles = makeStyles((theme) => ({
     input: {
-        '& label.Mui-focused': {
+        "& label.Mui-focused": {
             color: theme.palette.primary.main,
-            borderRadius: '15px',
-            border: '2px solid',
+            borderRadius: "15px",
+            border: "2px solid",
         },
-        '& .MuiInput-underline:after': {
+        "& .MuiInput-underline:after": {
             color: theme.palette.primary.main,
-            borderRadius: '15px',
-            border: '2px solid',
+            borderRadius: "15px",
+            border: "2px solid",
         },
-        '& .MuiOutlinedInput-root': {
+        "& .MuiOutlinedInput-root": {
             color: theme.palette.primary.main,
-            '& fieldset': {
+            "& fieldset": {
                 color: theme.palette.primary.main,
-                borderRadius: '15px',
-                border: '2px solid',
+                borderRadius: "15px",
+                border: "2px solid",
             },
-            '&:hover fieldset': {
+            "&:hover fieldset": {
                 color: theme.palette.primary.main,
-                borderRadius: '15px',
-                border: '2px solid',
+                borderRadius: "15px",
+                border: "2px solid",
             },
-            '&.Mui-focused fieldset': {
+            "&.Mui-focused fieldset": {
                 color: theme.palette.primary.main,
-                borderRadius: '15px',
-                border: '2px solid',
+                borderRadius: "15px",
+                border: "2px solid",
             },
         },
-        '& .css-bn8pyn-MuiFormLabel-root-MuiInputLabel-root': {
-            left: '0 !important',
-            right: 'auto',
-            marginLeft: '25px',
+        "& .css-bn8pyn-MuiFormLabel-root-MuiInputLabel-root": {
+            left: "0 !important",
+            right: "auto",
+            marginLeft: "25px",
             fontFamily: theme.typography.fontFamily,
             color: theme.palette.primary.main,
-            fontWeight: 'bold',
-            marginBottom: '25px !important',
-            marginTop: '-5px',
-            borderRadius: '15px',
-            border: '2px solid',
+            fontWeight: "bold",
+            marginBottom: "25px !important",
+            marginTop: "-5px",
+            borderRadius: "15px",
+            border: "2px solid",
         },
         "& .css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input": {
             fontFamily: theme.typography.fontFamily,
             color: theme.palette.primary.main,
-
         },
-        '& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input': {
-            textAlign: 'left',
+        "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
+            textAlign: "left",
             fontFamily: theme.typography.fontFamily,
             color: theme.palette.primary.main,
-            fontSize: '0.9rem',
-            borderRadius: '15px',
+            fontSize: "0.9rem",
+            borderRadius: "15px",
         },
-        '& .css-1wc848c-MuiFormHelperText-root.Mui-error': {
+        "& .css-1wc848c-MuiFormHelperText-root.Mui-error": {
             fontFamily: theme.typography.fontFamily,
             color: theme.palette.error.main,
-        }
+        },
     },
     inputIcon: {
-        fontSize: '1.5rem',
+        fontSize: "1.5rem",
         color: theme.palette.primary.main,
-        marginBottom: 5
+        marginBottom: 5,
     },
     button: {
-        borderRadius: '15px',
+        borderRadius: "15px",
         backgroundColor: theme.palette.secondary.main,
-        '&:hover': {
+        "&:hover": {
             backgroundColor: theme.palette.secondary.main,
         },
-        fontSize: '1rem',
+        fontSize: "1rem",
         color: theme.palette.background.default,
     },
     error: {
@@ -104,11 +107,16 @@ export default function BoardForm() {
     const classes = useStyles();
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleSubmmit = async (values) => {
         setLoading(true);
         try {
-            console.log(values);
+            const response = await axios.post("/board/", values);
+            console.log(response.data);
+            navigate("/game", {
+                state: { board: response.data },
+            });
         } catch (error) {
             setError("there was a problem in creating the board");
         }
@@ -122,23 +130,53 @@ export default function BoardForm() {
             onSubmit={(values) => handleSubmmit(values)}
         >
             <Form>
-                <Stack direction="column"  alignItems="center">
-                    <Field
-                        disabled={loading}
-                        name="name"
-                        className={classes.input}
-                        component={TextField}
-                        placeholder="enter the board name"
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment>
-                                    <AbcIcon className={classes.inputIcon} />
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
+                <Stack direction="column" alignItems="center">
+                    <Stack
+                        marginTop={2}
+                        direction="row"
+                        spacing={2}
+                        marginBottom={2.5}
+                    >
+                        <Field
+                            disabled={loading}
+                            name="name"
+                            className={classes.input}
+                            component={TextField}
+                            placeholder="enter the board name"
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment>
+                                        <AbcIcon
+                                            className={classes.inputIcon}
+                                        />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
 
-                    <Stack marginTop={2} direction="row" spacing={2} marginBottom={5}>
+                        <Field
+                            disabled={loading}
+                            name="robot_strength"
+                            className={classes.input}
+                            component={TextField}
+                            placeholder="enter the robot strength"
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment>
+                                        <SmartToyIcon
+                                            className={classes.inputIcon}
+                                        />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                    </Stack>
+
+                    <Stack 
+                        direction="row"
+                        spacing={2}
+                        marginBottom={5}
+                    >
                         <Field
                             disabled={loading}
                             name="row"
@@ -194,7 +232,6 @@ export default function BoardForm() {
                             </Typography>
                         )}
                     </Box>
-
                 </Stack>
             </Form>
         </Formik>
