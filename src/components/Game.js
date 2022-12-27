@@ -3,6 +3,7 @@ import React from "react";
 import Board from "./Board";
 import Stack from "@mui/material/Stack";
 import { useLocation } from "react-router";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     deleteButton: {
@@ -26,7 +27,7 @@ export default function Game(props) {
                 <Board board={location.state?.board} />
             </Grid>
             <Stack marginTop={10} marginBottom={15} direction="row" spacing={2}>
-                <Button variant="outlined" className={classes.menuButton}>
+                <Button component={Link} to={"/home"} variant="outlined" className={classes.menuButton}>
                     Back to Menu
                 </Button>
                 <Button variant="outlined" className={classes.deleteButton}>
