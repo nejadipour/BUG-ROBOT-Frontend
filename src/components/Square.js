@@ -40,13 +40,34 @@ export default function Square(props) {
     const [squareOccupied, setSsquareOccupied] = useState(square.is_occupied);
 
     async function handleMove() {
+        if (selectedSquare === square.id) {
+            setSelectedSquare(null);
+        }
+        else {
+            const values = {
+                destination: square.id,
+            }
+            try {
+                const response = await axios.post("/square/" + selectedSquare + "/move/", values);
+                setChangeCardList(response.data);
+                setSelectedSquare(null);
+            } catch (error) {
+                // notification pop-up
+            }
+
+        }
+
+    }
+
+    async function handleAdd() {
+        const newSquareType = selectedCard === "robot_card" ? "BOT" : "BUG";
         const values = {
-            destination: square.id,
+            square_type: newSquareType,
         }
         try {
-            const response = await axios.post("/square/" + selectedSquare + "/move/", values);
-            setChangeCardList(response.data);
-            setSelectedSquare(null);
+            await axios.post("/square/" + square.id + "/add_card/", values);
+            setSsquareOccupied(true);
+            setSquareType(newSquareType);
         } catch (error) {
             // notification pop-up
         }
@@ -56,11 +77,7 @@ export default function Square(props) {
     const handleClick = () => {
         if (selectedCard) {
             // add card
-            if (selectedCard === "robot_card") {
-                setSquareType("BOT");
-            } else {
-                setSquareType("BUG");
-            }
+            handleAdd();
         } else {
             if (selectedSquare) {
                 // move card
