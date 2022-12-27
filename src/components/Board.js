@@ -8,6 +8,10 @@ import Square from "./Square";
 import Card from "./Card";
 
 const useStyles = makeStyles((theme) => ({
+    name: {
+        color: theme.palette.secondary.main,
+        fontWeight: "bold",
+    },
     cardButton: {
         "& .MuiSvgIcon-root": {
             fontSize: "2.5rem",
@@ -25,29 +29,11 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: theme.palette.fire.main,
         },
     },
-    square: {
-        backgroundColor: theme.palette.primary.main,
-        margin: "15px",
-        border: "2px solid " + theme.palette.secondary.main,
-        borderRadius: "15px",
-        boxShadow:
-            "0 12px " +
-            theme.palette.secondary.main +
-            ", 0 18px rgba(0,0,0,0.4)",
-        width: "90px",
-        height: "80px",
-        "&:hover": {
-            backgroundColor: theme.palette.primary.main,
-        },
-        "& .MuiSvgIcon-root": {
-            fontSize: "2rem",
-            color: theme.palette.background.main,
-        },
-    },
 }));
 
-export default function Board() {
+export default function Board(props) {
     const classes = useStyles();
+    const { board } = props;
     const shape = [4, 5]; // shape format: [row, column]
     const [selectedCard, setSelectedCard] = useState(null);
     const [changeCard, setChangeCard] = useState(null);
@@ -72,7 +58,6 @@ export default function Board() {
                         <Stack direction="row">
                             {columns.map((column) => (
                                 <Square
-                                    className={classes.square}
                                     position={JSON.stringify([column, row])}
                                     is_occupied={true}
                                     type={null}
@@ -92,11 +77,14 @@ export default function Board() {
             {/* The Buttons Needed in The Game  */}
             <Grid item md={2} sm={12}>
                 <Stack
-                    marginTop={10}
+                    marginTop={5}
                     direction="column"
                     alignItems="center"
                     spacing={3}
                 >
+                    <Typography className={classes.name}>
+                        {board.name}
+                    </Typography>
                     {/* The Robot Card Button */}
                     <Card
                         icon={<SmartToyIcon />}
@@ -139,7 +127,7 @@ export default function Board() {
 
                     {/* The Fire Action Button */}
                     <Button
-                        disabled={selectedCard !== "robot_card"}
+                        disabled={selectedSquare === null}
                         className={classes.fireButton}
                     >
                         <Stack direction="row" spacing={1}>
