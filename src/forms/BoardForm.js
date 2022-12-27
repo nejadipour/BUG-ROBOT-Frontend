@@ -13,6 +13,7 @@ import React, { useState } from "react";
 import AbcIcon from "@mui/icons-material/Abc";
 import TableRowsIcon from "@mui/icons-material/TableRows";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
+import { BoardFormSchema } from "../validations/BoardFormValidation";
 
 const initialValues = {
     name: "",
@@ -33,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
             border: '2px solid',
         },
         '& .MuiOutlinedInput-root': {
+            color: theme.palette.primary.main,
             '& fieldset': {
                 color: theme.palette.primary.main,
                 borderRadius: '15px',
@@ -73,9 +75,9 @@ const useStyles = makeStyles((theme) => ({
             fontSize: '0.9rem',
             borderRadius: '15px',
         },
-        '& .css-1wc848c-MuiFormHelperText-root': {
+        '& .css-1wc848c-MuiFormHelperText-root.Mui-error': {
             fontFamily: theme.typography.fontFamily,
-            color: theme.palette.primary.main,
+            color: theme.palette.error.main,
         }
     },
     inputIcon: {
@@ -116,7 +118,7 @@ export default function BoardForm() {
     return (
         <Formik
             initialValues={initialValues}
-            validationSchema={null}
+            validationSchema={BoardFormSchema}
             onSubmit={(values) => handleSubmmit(values)}
         >
             <Form>
