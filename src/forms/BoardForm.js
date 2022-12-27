@@ -20,7 +20,83 @@ const initialValues = {
     column: "",
 };
 
-const useStyles = makeStyles((theme) => ({}));
+const useStyles = makeStyles((theme) => ({
+    input: {
+        '& label.Mui-focused': {
+            color: theme.palette.primary.main,
+            borderRadius: '15px',
+            border: '2px solid',
+        },
+        '& .MuiInput-underline:after': {
+            color: theme.palette.primary.main,
+            borderRadius: '15px',
+            border: '2px solid',
+        },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                color: theme.palette.primary.main,
+                borderRadius: '15px',
+                border: '2px solid',
+            },
+            '&:hover fieldset': {
+                color: theme.palette.primary.main,
+                borderRadius: '15px',
+                border: '2px solid',
+            },
+            '&.Mui-focused fieldset': {
+                color: theme.palette.primary.main,
+                borderRadius: '15px',
+                border: '2px solid',
+            },
+        },
+        '& .css-bn8pyn-MuiFormLabel-root-MuiInputLabel-root': {
+            left: '0 !important',
+            right: 'auto',
+            marginLeft: '25px',
+            fontFamily: theme.typography.fontFamily,
+            color: theme.palette.primary.main,
+            fontWeight: 'bold',
+            marginBottom: '25px !important',
+            marginTop: '-5px',
+            borderRadius: '15px',
+            border: '2px solid',
+        },
+        "& .css-1o9s3wi-MuiInputBase-input-MuiOutlinedInput-input": {
+            fontFamily: theme.typography.fontFamily,
+            color: theme.palette.primary.main,
+
+        },
+        '& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input': {
+            textAlign: 'left',
+            fontFamily: theme.typography.fontFamily,
+            color: theme.palette.primary.main,
+            fontSize: '0.9rem',
+            borderRadius: '15px',
+        },
+        '& .css-1wc848c-MuiFormHelperText-root': {
+            fontFamily: theme.typography.fontFamily,
+            color: theme.palette.primary.main,
+        }
+    },
+    inputIcon: {
+        fontSize: '1.5rem',
+        color: theme.palette.primary.main,
+        marginBottom: 5
+    },
+    button: {
+        borderRadius: '15px',
+        backgroundColor: theme.palette.secondary.main,
+        '&:hover': {
+            backgroundColor: theme.palette.secondary.main,
+        },
+        fontSize: '1rem',
+        color: theme.palette.background.default,
+    },
+    error: {
+        color: theme.palette.error.main,
+        fontWeight: "bold",
+    },
+}));
 
 export default function BoardForm() {
     const classes = useStyles();
@@ -44,7 +120,7 @@ export default function BoardForm() {
             onSubmit={(values) => handleSubmmit(values)}
         >
             <Form>
-                <Stack direction="column">
+                <Stack direction="column"  alignItems="center">
                     <Field
                         disabled={loading}
                         name="name"
@@ -52,15 +128,15 @@ export default function BoardForm() {
                         component={TextField}
                         placeholder="enter the board name"
                         InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="start">
+                            startAdornment: (
+                                <InputAdornment>
                                     <AbcIcon className={classes.inputIcon} />
                                 </InputAdornment>
                             ),
                         }}
                     />
 
-                    <Stack direction="row">
+                    <Stack marginTop={2} direction="row" spacing={2} marginBottom={5}>
                         <Field
                             disabled={loading}
                             name="row"
@@ -68,8 +144,8 @@ export default function BoardForm() {
                             component={TextField}
                             placeholder="enter the row"
                             InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="start">
+                                startAdornment: (
+                                    <InputAdornment>
                                         <TableRowsIcon
                                             className={classes.inputIcon}
                                         />
@@ -85,8 +161,8 @@ export default function BoardForm() {
                             component={TextField}
                             placeholder="enter the column"
                             InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="start">
+                                startAdornment: (
+                                    <InputAdornment>
                                         <ViewColumnIcon
                                             className={classes.inputIcon}
                                         />
@@ -109,7 +185,7 @@ export default function BoardForm() {
                         CREATE
                     </Button>
 
-                    <Box height="5vh" padding={2} marginTop={2}>
+                    <Box marginTop={2}>
                         {error !== "" && (
                             <Typography className={classes.error}>
                                 {error}
