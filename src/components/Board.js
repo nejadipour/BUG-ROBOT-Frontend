@@ -40,7 +40,7 @@ export default function Board(props) {
     const classes = useStyles();
     const { board } = props;
     const [selectedCard, setSelectedCard] = useState(null);
-    const [changeCard, setChangeCard] = useState(null);
+    const [changeCardList, setChangeCardList] = useState(null);
     const [selectedSquare, setSelectedSquare] = useState(null);
     const [render, setRender] = useState(false);
     const [squares, setSquares] = useState([]);
@@ -95,8 +95,8 @@ export default function Board(props) {
                                                 ]
                                             }
                                             selectedCard={selectedCard}
-                                            changeCard={changeCard}
-                                            setChangeCard={setChangeCard}
+                                            changeCardList={changeCardList}
+                                            setChangeCardList={setChangeCardList}
                                             selectedSquare={selectedSquare}
                                             setSelectedSquare={
                                                 setSelectedSquare

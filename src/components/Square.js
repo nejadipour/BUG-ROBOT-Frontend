@@ -2,6 +2,7 @@ import { Button, makeStyles } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import PestControlIcon from "@mui/icons-material/PestControl";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     square: {
@@ -28,22 +29,31 @@ const useStyles = makeStyles((theme) => ({
 export default function Square(props) {
     const classes = useStyles();
     const {
-        position,
-        type,
-        is_occupied,
+        square,
         selectedCard,
-        changeCard,
-        setChangeCard,
+        changeCardList,
+        setChangeCardList,
         selectedSquare,
         setSelectedSquare,
     } = props;
-    const [squareType, setSquareType] = useState(type);
+    const [squareType, setSquareType] = useState(square.square_type);
+    const [squareOccupied, setSsquareOccupied] = useState(square.is_occupied);
+
+    async function handleMove() {
+        const values = {
+            destination: square.id,
+        }
+        try {
+            const response = await axios.post("/square/" + selectedSquare + "/move/", values);
+            setChangeCardList(response.data);
+            setSelectedSquare(null);
+        } catch (error) {
+            // notification pop-up
+        }
+
+    }
 
     const handleClick = () => {
-        // testing deleting a position
-        if (position === "[0,0]") {
-            setChangeCard("[1,1]");
-        }
         if (selectedCard) {
             // add card
             if (selectedCard === "robot_card") {
@@ -54,31 +64,35 @@ export default function Square(props) {
         } else {
             if (selectedSquare) {
                 // move card
-                setSelectedSquare(null);
+                handleMove();
             } else {
                 // select a square
                 if (squareType === "BOT") {
-                    setSelectedSquare(position);
+                    setSelectedSquare(square.id);
                 }
             }
         }
     };
 
     useEffect(() => {
-        if (changeCard && changeCard === position) {
-            setSquareType("");
-            setChangeCard(null);
+        if (changeCardList) {
+            changeCardList.forEach((card) => {
+                if (card.id === square.id) {
+                    setSquareType(card.square_type);
+                    setSsquareOccupied(card.is_occupied);
+                }
+            })
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [changeCard]);
+    }, [changeCardList]);
 
     return (
         <Button
-            id={position}
+            id={square.id}
             className={classes.square}
             style={
-                selectedSquare === position
+                selectedSquare === square.id
                     ? { backgroundColor: "#ffa42e" }
                     : null
             }
@@ -86,7 +100,7 @@ export default function Square(props) {
                 handleClick();
             }}
         >
-            {is_occupied && (
+            {squareOccupied && (
                 <>
                     {squareType === "BOT" && <SmartToyIcon />}
                     {squareType === "BUG" && <PestControlIcon />}
