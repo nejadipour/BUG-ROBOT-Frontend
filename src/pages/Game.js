@@ -1,10 +1,10 @@
 import { Button, Grid, makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
-import Board from "./Board";
+import Board from "../components/Board";
 import Stack from "@mui/material/Stack";
 import { useLocation, useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-import ConfirmDialog from "./controls/ConfirmDialog";
+import ConfirmDialog from "../components/controls/ConfirmDialog";
 
 const useStyles = makeStyles((theme) => ({
     deleteButton: {
