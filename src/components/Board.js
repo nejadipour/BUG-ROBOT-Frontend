@@ -25,25 +25,6 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: theme.palette.fire.main,
         },
     },
-    square: {
-        backgroundColor: theme.palette.primary.main,
-        margin: "15px",
-        border: "2px solid " + theme.palette.secondary.main,
-        borderRadius: "15px",
-        boxShadow:
-            "0 12px " +
-            theme.palette.secondary.main +
-            ", 0 18px rgba(0,0,0,0.4)",
-        width: "90px",
-        height: "80px",
-        "&:hover": {
-            backgroundColor: theme.palette.primary.main,
-        },
-        "& .MuiSvgIcon-root": {
-            fontSize: "2rem",
-            color: theme.palette.background.main,
-        },
-    },
 }));
 
 export default function Board() {
@@ -72,7 +53,6 @@ export default function Board() {
                         <Stack direction="row">
                             {columns.map((column) => (
                                 <Square
-                                    className={classes.square}
                                     position={JSON.stringify([column, row])}
                                     is_occupied={true}
                                     type={null}
