@@ -115,7 +115,7 @@ export default function BoardForm() {
         setLoading(true);
         try {
             const response = await axios.post("/board/", values);
-            console.log(response.data);
+
             setNotify({
                 isOpen: true,
                 message: 'board created',
