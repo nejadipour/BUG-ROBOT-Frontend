@@ -54,17 +54,16 @@ export default function Board(props) {
                 "/square/get_board_squares/?board=" + board.id
             );
             setSquares(response.data);
+            setRender(true);
         } catch (error) {
             setError("there was a problem fetching the squares");
         }
-        setRender(true);
     }
 
     useEffect(() => {
         if (!render) fetchSquares();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [render]);
-
 
     const rows = [];
     if (board && board.row) {
@@ -82,27 +81,27 @@ export default function Board(props) {
 
     async function handleAttack() {
         try {
-            const response = await axios.post("/square/" + selectedSquare + "/attack/");
+            const response = await axios.post(
+                "/square/" + selectedSquare + "/attack/"
+            );
             setChangeCardList(response.data);
-            
         } catch (error) {
             // notification pop-up
             const message = error.response.data.message;
-                if (message) {
-                    setNotify({
-                        isOpen: true,
-                        message: message,
-                        type: "error",
-                    });
-                } else {
-                    setNotify({
-                        isOpen: true,
-                        message: "unknown error occurred",
-                        type: "error",
-                    });
-                }
+            if (message) {
+                setNotify({
+                    isOpen: true,
+                    message: message,
+                    type: "error",
+                });
+            } else {
+                setNotify({
+                    isOpen: true,
+                    message: "unknown error occurred",
+                    type: "error",
+                });
+            }
         }
-
     }
 
     return (
@@ -111,7 +110,6 @@ export default function Board(props) {
                 <Grid container justifyContent="center" md={12} sm={12}>
                     <Grid item md={3} sm={12} />
                     <Grid item md={6} sm={12}>
-                        {squares.length > 0 && 
                         <Stack direction="column" alignItems="center">
                             {rows.map((row) => (
                                 <Stack direction="row">
@@ -128,7 +126,9 @@ export default function Board(props) {
                                             }
                                             selectedCard={selectedCard}
                                             changeCardList={changeCardList}
-                                            setChangeCardList={setChangeCardList}
+                                            setChangeCardList={
+                                                setChangeCardList
+                                            }
                                             selectedSquare={selectedSquare}
                                             setSelectedSquare={
                                                 setSelectedSquare
@@ -138,7 +138,6 @@ export default function Board(props) {
                                 </Stack>
                             ))}
                         </Stack>
-                        }
                     </Grid>
 
                     <Grid item md={1} sm={12} />
@@ -214,6 +213,19 @@ export default function Board(props) {
                         )}
                     </Box>
                 </Grid>
+            )}
+            {!render && (
+                <>
+                    <Grid container justifyContent="center">
+                        <Box padding={2}>
+                            {error !== "" && (
+                                <Typography className={classes.error}>
+                                    {error}
+                                </Typography>
+                            )}
+                        </Box>
+                    </Grid>
+                </>
             )}
         </>
     );
