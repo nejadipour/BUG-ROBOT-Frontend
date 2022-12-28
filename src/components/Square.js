@@ -1,8 +1,9 @@
 import { Button, makeStyles } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import PestControlIcon from "@mui/icons-material/PestControl";
 import axios from "axios";
+import { NotificationContext } from "../contexts/NotificationContext";
 
 const useStyles = makeStyles((theme) => ({
     square: {
@@ -38,40 +39,68 @@ export default function Square(props) {
     } = props;
     const [squareType, setSquareType] = useState(square.square_type);
     const [squareOccupied, setSsquareOccupied] = useState(square.is_occupied);
+    const { setNotify } = useContext(NotificationContext);
 
     async function handleMove() {
         if (selectedSquare === square.id) {
             setSelectedSquare(null);
-        }
-        else {
+        } else {
             const values = {
                 destination: square.id,
-            }
+            };
             try {
-                const response = await axios.post("/square/" + selectedSquare + "/move/", values);
+                const response = await axios.post(
+                    "/square/" + selectedSquare + "/move/",
+                    values
+                );
                 setChangeCardList(response.data);
                 setSelectedSquare(null);
             } catch (error) {
                 // notification pop-up
+                const message = error.response.data.message;
+                if (message) {
+                    setNotify({
+                        isOpen: true,
+                        message: message,
+                        type: "error",
+                    });
+                } else {
+                    setNotify({
+                        isOpen: true,
+                        message: "unknown error occurred",
+                        type: "error",
+                    });
+                }
             }
-
         }
-
     }
 
     async function handleAdd() {
         const newSquareType = selectedCard === "robot_card" ? "BOT" : "BUG";
         const values = {
             square_type: newSquareType,
-        }
+        };
         try {
             await axios.post("/square/" + square.id + "/add_card/", values);
             setSsquareOccupied(true);
             setSquareType(newSquareType);
         } catch (error) {
             // notification pop-up
+            const message = error.response.data.message;
+            if (message) {
+                setNotify({
+                    isOpen: true,
+                    message: message,
+                    type: "error",
+                });
+            } else {
+                setNotify({
+                    isOpen: true,
+                    message: "unknown error occurred",
+                    type: "error",
+                });
+            }
         }
-
     }
 
     const handleClick = () => {
@@ -98,7 +127,7 @@ export default function Square(props) {
                     setSquareType(card.square_type);
                     setSsquareOccupied(card.is_occupied);
                 }
-            })
+            });
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

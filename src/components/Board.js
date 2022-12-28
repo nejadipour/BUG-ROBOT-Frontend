@@ -1,12 +1,13 @@
 import { Box, Button, Grid, Typography, makeStyles } from "@material-ui/core";
 import { Stack } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import PestControlIcon from "@mui/icons-material/PestControl";
 import WhatshotIcon from "@mui/icons-material/Whatshot";
 import Square from "./Square";
 import Card from "./Card";
 import axios from "axios";
+import { NotificationContext } from "../contexts/NotificationContext";
 
 const useStyles = makeStyles((theme) => ({
     name: {
@@ -45,6 +46,7 @@ export default function Board(props) {
     const [render, setRender] = useState(false);
     const [squares, setSquares] = useState([]);
     const [error, setError] = useState("");
+    const { setNotify } = useContext(NotificationContext);
 
     async function fetchSquares() {
         try {
@@ -52,11 +54,10 @@ export default function Board(props) {
                 "/square/get_board_squares/?board=" + board.id
             );
             setSquares(response.data);
-            setRender(true);
         } catch (error) {
             setError("there was a problem fetching the squares");
-            setRender(true);
         }
+        setRender(true);
     }
 
     useEffect(() => {
@@ -64,14 +65,19 @@ export default function Board(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [render]);
 
+
     const rows = [];
-    for (var r = 0; r < board.row; r++) {
-        rows.push(r);
+    if (board && board.row) {
+        for (var r = 0; r < board.row ? board.row : 0; r++) {
+            rows.push(r);
+        }
     }
 
     const columns = [];
-    for (var c = 0; c < board.column; c++) {
-        columns.push(c);
+    if (board && board.column) {
+        for (var c = 0; c < board.column ? board.column : 0; c++) {
+            columns.push(c);
+        }
     }
 
     async function handleAttack() {
@@ -81,6 +87,20 @@ export default function Board(props) {
             
         } catch (error) {
             // notification pop-up
+            const message = error.response.data.message;
+                if (message) {
+                    setNotify({
+                        isOpen: true,
+                        message: message,
+                        type: "error",
+                    });
+                } else {
+                    setNotify({
+                        isOpen: true,
+                        message: "unknown error occurred",
+                        type: "error",
+                    });
+                }
         }
 
     }
@@ -91,6 +111,7 @@ export default function Board(props) {
                 <Grid container justifyContent="center" md={12} sm={12}>
                     <Grid item md={3} sm={12} />
                     <Grid item md={6} sm={12}>
+                        {squares.length > 0 && 
                         <Stack direction="column" alignItems="center">
                             {rows.map((row) => (
                                 <Stack direction="row">
@@ -117,6 +138,7 @@ export default function Board(props) {
                                 </Stack>
                             ))}
                         </Stack>
+                        }
                     </Grid>
 
                     <Grid item md={1} sm={12} />
@@ -129,7 +151,7 @@ export default function Board(props) {
                             spacing={3}
                         >
                             <Typography className={classes.name}>
-                                {board.name}
+                                {board ? board.name : ""}
                             </Typography>
                             {/* The Robot Card Button */}
                             <Card

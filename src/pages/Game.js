@@ -1,11 +1,12 @@
 import { Button, Grid, makeStyles } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Board from "../components/Board";
 import Stack from "@mui/material/Stack";
 import { useLocation, useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import ConfirmDialog from "../components/controls/ConfirmDialog";
 import axios from "axios";
+import { NotificationContext } from "../contexts/NotificationContext";
 
 const useStyles = makeStyles((theme) => ({
     deleteButton: {
@@ -24,6 +25,7 @@ export default function Game() {
     const location = useLocation();
     const board = location.state?.board;
     const navigate = useNavigate();
+    const { setNotify } = useContext(NotificationContext);
 
     const [confirmLogout, setConfirmLogout] = useState({
         isOpen: false,
@@ -36,6 +38,11 @@ export default function Game() {
     const handleDelete = async () => {
         try {
             await axios.delete("/board/" + board.id);
+            setNotify({
+                isOpen: true,
+                message: 'board deleted',
+                type: 'error'
+            })
             navigate("/home");
             return true;
         } catch (error) {
