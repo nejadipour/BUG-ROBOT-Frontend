@@ -11,6 +11,7 @@ import MenuItem from "../components/items/MenuItem";
 import { Stack } from "@mui/material";
 import Popup from "../components/controls/Popup";
 import BoardForm from "../forms/BoardForm";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     error: {
@@ -34,19 +35,8 @@ export default function Menu() {
 
     async function fetchBoards() {
         try {
-            // const response = await axios.get('')
-            // setBoards(response.data);
-
-            setBoards([
-                {
-                    shape: [4, 4],
-                    name: "test board",
-                },
-                {
-                    shape: [4, 4],
-                    name: "test board2",
-                },
-            ]);
+            const response = await axios.get('/board')
+            setBoards(response.data);
 
             setRender(true);
         } catch (error) {
@@ -63,7 +53,7 @@ export default function Menu() {
         <>
             <Grid container justifyContent="center">
                 {render && (
-                    <Stack alignItems="center" direction="column">
+                    <Stack alignItems="center" direction="column" marginBottom={15}>
                         <List
                             sx={{
                                 minWidth: "25vw",
