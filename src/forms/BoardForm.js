@@ -9,7 +9,7 @@ import {
 import { Stack } from "@mui/material";
 import { Field, Form, Formik } from "formik";
 import { TextField } from "formik-mui";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import AbcIcon from "@mui/icons-material/Abc";
 import TableRowsIcon from "@mui/icons-material/TableRows";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
@@ -17,6 +17,7 @@ import { BoardFormSchema } from "../validations/BoardFormValidation";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
+import { NotificationContext } from "../contexts/NotificationContext";
 
 const initialValues = {
     name: "",
@@ -108,12 +109,18 @@ export default function BoardForm() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const { setNotify } = useContext(NotificationContext);
 
     const handleSubmmit = async (values) => {
         setLoading(true);
         try {
             const response = await axios.post("/board/", values);
             console.log(response.data);
+            setNotify({
+                isOpen: true,
+                message: 'board created',
+                type: 'success'
+            })
             navigate("/game", {
                 state: { board: response.data },
             });
