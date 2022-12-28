@@ -54,11 +54,10 @@ export default function Board(props) {
                 "/square/get_board_squares/?board=" + board.id
             );
             setSquares(response.data);
-            setRender(true);
         } catch (error) {
             setError("there was a problem fetching the squares");
-            setRender(true);
         }
+        setRender(true);
     }
 
     useEffect(() => {
@@ -66,14 +65,19 @@ export default function Board(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [render]);
 
+
     const rows = [];
-    for (var r = 0; r < board.row; r++) {
-        rows.push(r);
+    if (board && board.row) {
+        for (var r = 0; r < board.row ? board.row : 0; r++) {
+            rows.push(r);
+        }
     }
 
     const columns = [];
-    for (var c = 0; c < board.column; c++) {
-        columns.push(c);
+    if (board && board.column) {
+        for (var c = 0; c < board.column ? board.column : 0; c++) {
+            columns.push(c);
+        }
     }
 
     async function handleAttack() {
@@ -107,6 +111,7 @@ export default function Board(props) {
                 <Grid container justifyContent="center" md={12} sm={12}>
                     <Grid item md={3} sm={12} />
                     <Grid item md={6} sm={12}>
+                        {squares.length > 0 && 
                         <Stack direction="column" alignItems="center">
                             {rows.map((row) => (
                                 <Stack direction="row">
@@ -133,6 +138,7 @@ export default function Board(props) {
                                 </Stack>
                             ))}
                         </Stack>
+                        }
                     </Grid>
 
                     <Grid item md={1} sm={12} />
@@ -145,7 +151,7 @@ export default function Board(props) {
                             spacing={3}
                         >
                             <Typography className={classes.name}>
-                                {board.name}
+                                {board ? board.name : ""}
                             </Typography>
                             {/* The Robot Card Button */}
                             <Card
