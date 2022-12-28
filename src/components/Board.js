@@ -1,12 +1,13 @@
 import { Box, Button, Grid, Typography, makeStyles } from "@material-ui/core";
 import { Stack } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import PestControlIcon from "@mui/icons-material/PestControl";
 import WhatshotIcon from "@mui/icons-material/Whatshot";
 import Square from "./Square";
 import Card from "./Card";
 import axios from "axios";
+import { NotificationContext } from "../contexts/NotificationContext";
 
 const useStyles = makeStyles((theme) => ({
     name: {
@@ -45,6 +46,7 @@ export default function Board(props) {
     const [render, setRender] = useState(false);
     const [squares, setSquares] = useState([]);
     const [error, setError] = useState("");
+    const { setNotify } = useContext(NotificationContext);
 
     async function fetchSquares() {
         try {
@@ -81,6 +83,20 @@ export default function Board(props) {
             
         } catch (error) {
             // notification pop-up
+            const message = error.response.data.message;
+                if (message) {
+                    setNotify({
+                        isOpen: true,
+                        message: message,
+                        type: "error",
+                    });
+                } else {
+                    setNotify({
+                        isOpen: true,
+                        message: "unknown error occurred",
+                        type: "error",
+                    });
+                }
         }
 
     }
