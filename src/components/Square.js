@@ -1,8 +1,9 @@
 import { Button, makeStyles } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import PestControlIcon from "@mui/icons-material/PestControl";
 import axios from "axios";
+import { NotificationContext } from "../contexts/NotificationContext";
 
 const useStyles = makeStyles((theme) => ({
     square: {
@@ -38,6 +39,7 @@ export default function Square(props) {
     } = props;
     const [squareType, setSquareType] = useState(square.square_type);
     const [squareOccupied, setSsquareOccupied] = useState(square.is_occupied);
+    const { setNotify } = useContext(NotificationContext);
 
     async function handleMove() {
         if (selectedSquare === square.id) {
@@ -70,6 +72,22 @@ export default function Square(props) {
             setSquareType(newSquareType);
         } catch (error) {
             // notification pop-up
+            const message = error.response.data.message;
+            if (message) {
+                setNotify({
+                    isOpen: true,
+                    message: message,
+                    type: 'error'
+                })
+            }
+            else {
+                setNotify({
+                    isOpen: true,
+                    message: "unknown error occurred",
+                    type: 'error'
+                })
+
+            }
         }
 
     }
