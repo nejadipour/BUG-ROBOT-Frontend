@@ -74,6 +74,17 @@ export default function Board(props) {
         columns.push(c);
     }
 
+    async function handleAttack() {
+        try {
+            const response = await axios.post("/square/" + selectedSquare + "/attack/");
+            setChangeCardList(response.data);
+            
+        } catch (error) {
+            // notification pop-up
+        }
+
+    }
+
     return (
         <>
             {render && (
@@ -164,6 +175,7 @@ export default function Board(props) {
                             <Button
                                 disabled={selectedSquare === null}
                                 className={classes.fireButton}
+                                onClick={handleAttack}
                             >
                                 <Stack direction="row" spacing={1}>
                                     <WhatshotIcon />
