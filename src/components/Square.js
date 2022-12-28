@@ -44,28 +44,42 @@ export default function Square(props) {
     async function handleMove() {
         if (selectedSquare === square.id) {
             setSelectedSquare(null);
-        }
-        else {
+        } else {
             const values = {
                 destination: square.id,
-            }
+            };
             try {
-                const response = await axios.post("/square/" + selectedSquare + "/move/", values);
+                const response = await axios.post(
+                    "/square/" + selectedSquare + "/move/",
+                    values
+                );
                 setChangeCardList(response.data);
                 setSelectedSquare(null);
             } catch (error) {
                 // notification pop-up
+                const message = error.response.data.message;
+                if (message) {
+                    setNotify({
+                        isOpen: true,
+                        message: message,
+                        type: "error",
+                    });
+                } else {
+                    setNotify({
+                        isOpen: true,
+                        message: "unknown error occurred",
+                        type: "error",
+                    });
+                }
             }
-
         }
-
     }
 
     async function handleAdd() {
         const newSquareType = selectedCard === "robot_card" ? "BOT" : "BUG";
         const values = {
             square_type: newSquareType,
-        }
+        };
         try {
             await axios.post("/square/" + square.id + "/add_card/", values);
             setSsquareOccupied(true);
@@ -77,19 +91,16 @@ export default function Square(props) {
                 setNotify({
                     isOpen: true,
                     message: message,
-                    type: 'error'
-                })
-            }
-            else {
+                    type: "error",
+                });
+            } else {
                 setNotify({
                     isOpen: true,
                     message: "unknown error occurred",
-                    type: 'error'
-                })
-
+                    type: "error",
+                });
             }
         }
-
     }
 
     const handleClick = () => {
@@ -116,7 +127,7 @@ export default function Square(props) {
                     setSquareType(card.square_type);
                     setSsquareOccupied(card.is_occupied);
                 }
-            })
+            });
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
