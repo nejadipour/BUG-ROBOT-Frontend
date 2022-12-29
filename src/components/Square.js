@@ -45,14 +45,9 @@ export default function Square(props) {
         if (selectedSquare === square.id) {
             setSelectedSquare(null);
         } else {
-            const values = {
-                destination: square.id,
-            };
             try {
                 const response = await axios.post(
-                    "/square/" + selectedSquare + "/move/",
-                    values
-                );
+                    "/square/" + selectedSquare + "/move/?destination="+square.id);
                 setChangeCardList(response.data);
                 setSelectedSquare(null);
             } catch (error) {
@@ -77,11 +72,8 @@ export default function Square(props) {
 
     async function handleAdd() {
         const newSquareType = selectedCard === "robot_card" ? "BOT" : "BUG";
-        const values = {
-            square_type: newSquareType,
-        };
         try {
-            await axios.post("/square/" + square.id + "/add_card/", values);
+            await axios.post("/square/" + square.id + "/add_card/?square_type="+newSquareType);
             setSsquareOccupied(true);
             setSquareType(newSquareType);
         } catch (error) {
